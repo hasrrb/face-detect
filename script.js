@@ -3,68 +3,72 @@ const statusBtn = document.getElementById('status-btn');
 
 let model;
 
-// 1. TensorFlow AI Model load karein
-console.log("Loading AI Model...");
-cocoSsd.load().then((loadedModel) => {
-  model = loadedModel;
-  console.log("Model Loaded Successfully!");
-  
-  // Model load hone ke baad camera shuru karein
-  startCamera();
-}).catch(err => {
-  console.error("Model Loading Error: ", err);
-});
-
-// 2. Camera Start Karein
-function startCamera() {
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        video.srcObject = stream;
-        
-        // Jab video play hona shuru ho tabhi detection start karein
-        video.onloadeddata = () => {
-          console.log("Video Feed Active. Starting Detection Loop...");
-          detectFrame();
-        };
-      })
-      .catch((err) => {
-        console.error("Camera Error: ", err);
-        statusBtn.innerText = "Camera Blocked";
-      });
-  }
-}
-
-// 3. Continuous Detection Loop
-function detectFrame() {
-  // Check karein ke video chal rahi hai aur model ready hai
-  if (model && video.readyState === 4) {
-    model.detect(video).then((predictions) => {
-      
-      // Console par predictions print karein taake pta chale AI ko kya mil raha hai
-      console.log("Detections: ", predictions);
-
-      // Check karein kya koi 'person' detect hua hai (Confidence > 50%)
-      const personFound = predictions.some(
-        (prediction) => prediction.class === 'person' && prediction.score > 0.5
-      );
-
-      if (personFound) {
-        statusBtn.innerText = "Person Detected";
-        statusBtn.className = "green-btn";
-      } else {
-        statusBtn.innerText = "No Person Detected";
-        statusBtn.className = "red-btn";
-      }
-
-      // Next frame ke liye loop repeat karein
-      requestAnimationFrame(detectFrame);
-    }).catch(err => {
-      console.error("Detection Error: ", err);
-      requestAnimationFrame(detectFrame);
+// 1. Setup Camera
+async function setupCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: 640, height: 480 },
+      audio: false
     });
-  } else {
-    // Video ready hone ka wait karein
-    requestAnimationFrame(detectFrame);
+    video.srcObject = stream;
+    
+    return new Promise((resolve) => {
+      video.onloadedmetadata = () => {
+        resolve(video);
+      };
+    });
+  } catch (error) {
+    statusBtn.innerText = "Camera Access Denied";
+    console.error("Camera Error:", error);
   }
 }
+
+// 2. Detection Loop
+async function detectPerson() {
+  if (!model) return;
+
+  // Detect objects in the video frame
+  const predictions = await model.detect(video);
+  
+  // Look for 'person' class in predictions
+  let personDetected = false;
+
+  for (let i = 0; i < predictions.length; i++) {
+    if (predictions[i].class === 'person') {
+      personDetected = true;
+      break;
+    }
+  }
+
+  // Update UI
+  if (personDetected) {
+    statusBtn.innerText = "Person Detected";
+    statusBtn.className = "green-btn";
+  } else {
+    statusBtn.innerText = "No Person Detected";
+    statusBtn.className = "red-btn";
+  }
+
+  // Run continuous loop
+  requestAnimationFrame(detectPerson);
+}
+
+// 3. Initialize App
+async function init() {
+  statusBtn.innerText = "Loading AI Model...";
+  
+  // Load fixed version COCO-SSD Model
+  model = await cocoSsd.load({ base: 'lite_mobilenet_v2' });
+  
+  statusBtn.innerText = "Starting Camera...";
+  await setupCamera();
+  
+  video.play();
+  statusBtn.innerText = "No Person Detected";
+  
+  // Start Detection
+  detectPerson();
+}
+
+// Run code when page loads
+init();
