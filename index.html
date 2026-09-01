@@ -5,13 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Person Tracker</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  
+  <!-- Direct Working Tensorflow & COCO-SSD CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <video id="webcam" autoplay playsinline width="640" height="480"></video>
-    <div id="status-btn" class="red-btn">No Person Detected</div>
+    <h2>Real-Time Person Tracker</h2>
+    
+    <div class="video-wrapper">
+      <video id="webcam" autoplay playsinline muted width="640" height="480"></video>
+    </div>
+
+    <br>
+    <div id="status-btn" class="red-btn">Initializing Model...</div>
   </div>
 
   <script src="script.js"></script>
