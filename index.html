@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Person Tracker</title>
+  <title>Advanced AI Person Tracker</title>
   <link rel="stylesheet" href="style.css">
   
-  <!-- Direct Working Tensorflow & COCO-SSD CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
+  <!-- TensorFlow.js & BlazeFace Model for High Speed Face Detection -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
 </head>
 <body>
   <div class="container">
-    <h2>Real-Time Person Tracker</h2>
+    <h2>Smart AI Face Tracker</h2>
     
-    <div class="video-wrapper">
+    <div class="video-container">
       <video id="webcam" autoplay playsinline muted width="640" height="480"></video>
+      <canvas id="overlay" width="640" height="480"></canvas>
     </div>
 
-    <br>
-    <div id="status-btn" class="red-btn">Initializing Model...</div>
+    <div id="status-btn" class="red-btn">Loading AI Engine...</div>
   </div>
 
   <script src="script.js"></script>
