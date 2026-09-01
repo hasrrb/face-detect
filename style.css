@@ -1,52 +1,61 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  background-color: #1a1a1a;
-  color: white;
+  background-color: #121212;
+  color: #ffffff;
 }
 
 .container {
   text-align: center;
 }
 
-.video-wrapper {
-  margin: 20px auto;
+.video-container {
+  position: relative;
   width: 640px;
   height: 480px;
-  background-color: #000;
+  margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  background-color: #000000;
 }
 
-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Video aur Canvas dono ek doosre ke upar align karne ke liye */
+#webcam, #overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 640px;
+  height: 480px;
 }
 
 #status-btn {
-  padding: 15px 40px;
+  padding: 16px 45px;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 50px;
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .red-btn {
   background-color: #ff3b30;
-  color: white;
+  color: #ffffff;
 }
 
 .green-btn {
   background-color: #34c759;
-  color: white;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(52, 199, 89, 0.6) !important;
 }
